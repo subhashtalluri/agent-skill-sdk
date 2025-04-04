@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.Python
+env/
+venv/
+.venv/
+build/
+dist/
+*.log
+
+# MkDocs output
+site/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+
+# Compiled
+*.so
+*.dll
+*.dylib
+
+# Jupyter
+.ipynb_checkpoints
+
+# Unit test / coverage
+.coverage
+.cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+
+# GitHub Pages
+gh-pages/
