@@ -1,6 +1,6 @@
 # 🧠 Agent Skill SDK
 
-Build modular, intelligent agents with event triggers, retry logic, memory, LLM planning (Amazon Bedrock), and a live dashboard.
+A lightweight, event-driven framework for building intelligent agents with modular skills, real-world triggers, memory, and LLM-based planning using Amazon Bedrock.
 
 ![Build](https://img.shields.io/badge/build-passing-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-blue)
@@ -10,17 +10,17 @@ Build modular, intelligent agents with event triggers, retry logic, memory, LLM 
 
 ## 🚀 Features
 
-- ✅ Skill-based programming with `@skill` decorators
-- 🔁 Retry, backoff, and fallback on skill failure
-- 🧠 LLM reasoning via Amazon Bedrock
-- 🧩 Triggers: Timer, MQTT, HTTP, Cron, File Watcher, CoAP
-- 📜 Memory tracing + export (CSV/JSON)
-- ⚙️ CLI and 🧪 FastAPI-based dashboard
-- 📚 Full developer documentation with MkDocs
+- ✅ Modular `@skill`-based programming model
+- 🔁 Retry, backoff, and fallback support
+- 🧠 LLM reasoning via **Amazon Bedrock**
+- 📡 Event triggers: Timer, MQTT, HTTP, Cron, File Watcher, CoAP, AWS IoT Core
+- 💡 Edge-ready: Runs on Raspberry Pi, Jetson Nano, AWS Greengrass
+- 📜 Memory tracing and export (CSV/JSON)
+- 🧪 FastAPI dashboard + CLI support
 
 ---
 
-## 📦 Install
+## 📦 Installation
 
 ```bash
 pip install agent-skill-sdk
@@ -28,104 +28,125 @@ pip install agent-skill-sdk
 
 ---
 
-## 🧪 Example: Define a Skill
+## 🔧 Define a Skill
+
+You can write reactive skills that trigger from events:
 
 ```python
 from agent_skill_sdk import skill
 
-@skill(trigger="on_temp_high", retries=2, backoff="exponential")
+@skill(trigger="on_temperature_high", retries=2, backoff="fixed")
 def turn_on_fan(context):
-    print("Turning on fan:", context.get("location"))
+    temp = context.get("temp")
+    print(f"[Skill] Fan turned ON due to high temperature: {temp}")
 ```
 
 ---
 
-## ⚡ Trigger from CLI
+## 🧠 LLM Reasoning with Amazon Bedrock
 
-```bash
-agent register examples.fan_control.turn_on_fan
-agent trigger on_temp_high --data '{"location": "lab"}'
-```
+Use `run_reasoning()` to generate intelligent plans based on a goal and memory.
 
----
-
-## 🧠 LLM Planning (Amazon Bedrock)
+### 📄 Define a Planner Skill
 
 ```python
+from agent_skill_sdk import skill
+from agent_skill_sdk.reasoning.bedrock import run_reasoning
+
 @skill(trigger="on_goal")
 def bedrock_planner(context):
-    response = run_reasoning(context.get("goal"))
+    goal = context.get("goal", "unknown")
+    memory_log = context.memory.recall_last_n(5)
+    template = context.templates.get("goal_plan")
+
+    response = run_reasoning(goal, memory=memory_log, template=template)
+
     action = response.get("action")
-    context.agent.trigger(action)
+    reason = response.get("reason")
+
+    context.memory.record_event("llm_plan", {
+        "goal": goal,
+        "template": template,
+        "llm_response": response
+    })
+
+    if action:
+        context.agent.trigger(action, {
+            "from_planner": True,
+            "goal": goal,
+            "reason": reason
+        })
 ```
 
-Supports:
-- Prompt templates
-- Memory recall
-- Fallback actions
+### 🧠 Example Prompt Template
+
+```python
+agent.templates.register("goal_plan", '''
+You are solving the goal: {goal}
+Memory:
+{memory}
+Return: { "action": "skill_name", "reason": "why this action" }
+''')
+```
 
 ---
 
-## 🌐 Dashboard
+## 📡 Available Triggers
+
+| Trigger       		| Plugin File              | Description                        |
+|-----------------------|--------------------------|------------------------------------|
+| Timer         		| `timer.py`               | Interval-based triggers            |
+| MQTT          		| `mqtt.py`                | IoT messages over MQTT             |
+| HTTP/Webhook  		| `http.py`                | POST to trigger skills             |
+| Cron          		| `cron.py`                | Cron-based scheduling              |
+| File Watcher  		| `file_watcher.py`        | Watch for file changes             |
+| CoAP          		| `coap.py`                | UDP-based IoT messaging            |
+| AWS IoT Core  		| `aws_iot_core.py`        | Secure MQTT via Amazon IoT Core    |
+| AWS IoT Greengrass    | `greengrass/adapter.py`  | Offline agent support on AWS Edge  |
+
+---
+
+## 🧠 Traceable Memory
+
+Every skill and reasoning plan is logged:
+```python
+trace_json = agent.export_trace("json")
+trace_csv = agent.export_trace("csv")
+```
+
+---
+
+## 🧪 Dashboard
 
 ```bash
 uvicorn dashboard.app:app --reload
 ```
 
-Visit [http://localhost:8000](http://localhost:8000) to:
-- View registered skills
-- Trigger events manually
-- Inspect LLM trace logs
+Visit `http://localhost:8000` to:
+- View skills
+- Trigger events
+- Inspect memory/LLM traces
 
 ---
 
-## 🔌 Trigger Plugins
+## 🧱 Edge Deployment
 
-| Trigger       | File                      | Event             |
-|---------------|---------------------------|-------------------|
-| Timer         | `timer.py`                | `on_timer`        |
-| MQTT          | `mqtt.py`                 | `on_mqtt_message` |
-| HTTP/Webhook  | `http.py`                 | `on_http`         |
-| Cron          | `cron.py`                 | `on_cron`         |
-| File Watcher  | `file_watcher.py`         | `on_file_change`  |
-| CoAP (IoT)    | `coap.py`                 | `on_coap`         |
+Supports Raspberry Pi, Jetson Nano, and AWS Greengrass.
+
+Run locally with:
+```bash
+python app.py
+```
+
+Deploy to Greengrass with:
+- `greengrass/adapter.py`
+- `greengrass/recipe.json`
 
 ---
 
 ## 📚 Documentation
 
-Visit your deployed docs here:  
-➡️ [https://subhashtalluri.github.io/agent-skill-sdk/](https://subhashtalluri.github.io/agent-skill-sdk)
-
-Or build locally:
-```bash
-mkdocs serve
-```
-
----
-
-## 📤 Deployment
-
-Use Docker or deploy with Uvicorn:
-
-```bash
-uvicorn dashboard.app:app --host 0.0.0.0 --port 8000
-```
-
----
-
-## 🧠 Trace Export
-
-```python
-agent.export_trace("json")
-agent.export_trace("csv")
-```
-
----
-
-## 🧩 Contributions Welcome
-
-Build a trigger plugin, skill library, or submit a PR!
+Full docs: [https://subhashtalluri.github.io/agent-skill-sdk/](https://subhashtalluri.github.io/agent-skill-sdk)
 
 ---
 
