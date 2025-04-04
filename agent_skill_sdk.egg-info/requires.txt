@@ -1,0 +1,7 @@
+boto3
+paho-mqtt
+schedule
+uvicorn
+fastapi
+watchdog
+python-dotenv

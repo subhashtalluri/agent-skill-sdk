@@ -1,0 +1,2 @@
+[console_scripts]
+agent = agent_skill_sdk.cli.main:main

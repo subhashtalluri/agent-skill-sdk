@@ -1,16 +1,28 @@
 [project]
 name = "agent-skill-sdk"
 version = "0.1.0"
-description = "Modular, event-driven AI agent SDK with skill registration, retries, and plugin triggers"
+description = "Modular, event-driven AI agent SDK with trigger plugins, LLM reasoning (Amazon Bedrock), retries, and a dashboard."
 authors = [{ name = "Your Name", email = "you@example.com" }]
 license = "MIT"
 readme = "README.md"
 requires-python = ">=3.8"
-dependencies = ["watchdog", "paho-mqtt", "python-dotenv"]
+dependencies = [
+    "boto3",
+    "paho-mqtt",
+    "schedule",
+    "uvicorn",
+    "fastapi",
+    "watchdog",
+    "python-dotenv"
+]
 
 [project.scripts]
 agent = "agent_skill_sdk.cli.main:main"
 
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["agent_skill_sdk*"]
