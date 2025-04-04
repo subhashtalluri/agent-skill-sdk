@@ -1,0 +1,19 @@
+site_name: Agent Skill SDK
+theme:
+  name: material
+  palette:
+    scheme: slate
+    primary: teal
+    accent: lime
+
+nav:
+  - Home: index.md
+  - Getting Started: getting_started.md
+  - Writing Skills: writing_skills.md
+  - Triggers: triggers.md
+  - LLM Reasoning: llm_reasoning.md
+  - CLI & Dashboard: cli_dashboard.md
+  - Memory & Tracing: memory_tracing.md
+  - Advanced: advanced_topics.md
+  - Deployment: deployment.md
+  - Examples: examples.md
