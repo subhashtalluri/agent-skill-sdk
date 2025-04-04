@@ -16,8 +16,10 @@ agent_skill_sdk/agent/registry.py
 agent_skill_sdk/agent/runner.py
 agent_skill_sdk/cli/main.py
 agent_skill_sdk/config/settings.py
+agent_skill_sdk/greengrass/adapter.py
 agent_skill_sdk/logs/memory.py
 agent_skill_sdk/plugins/__init__.py
+agent_skill_sdk/plugins/aws_iot_core.py
 agent_skill_sdk/plugins/coap.py
 agent_skill_sdk/plugins/cron.py
 agent_skill_sdk/plugins/file_watcher.py

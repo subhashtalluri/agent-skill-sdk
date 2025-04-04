@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: agent-skill-sdk
-Version: 0.1.0
+Version: 0.1.1
 Summary: Modular, event-driven AI agent SDK with trigger plugins, LLM reasoning (Amazon Bedrock), retries, and a dashboard.
 Author-email: Your Name <you@example.com>
 License-Expression: MIT

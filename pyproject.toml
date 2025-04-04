@@ -1,6 +1,6 @@
 [project]
 name = "agent-skill-sdk"
-version = "0.1.0"
+version = "0.1.1"
 description = "Modular, event-driven AI agent SDK with trigger plugins, LLM reasoning (Amazon Bedrock), retries, and a dashboard."
 authors = [{ name = "Your Name", email = "you@example.com" }]
 license = "MIT"
