@@ -1,0 +1,16 @@
+[project]
+name = "agent-skill-sdk"
+version = "0.1.0"
+description = "Modular, event-driven AI agent SDK with skill registration, retries, and plugin triggers"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+license = "MIT"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = ["watchdog", "paho-mqtt", "python-dotenv"]
+
+[project.scripts]
+agent = "agent_skill_sdk.cli.main:main"
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
