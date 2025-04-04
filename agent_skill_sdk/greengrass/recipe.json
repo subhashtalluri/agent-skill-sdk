@@ -1,0 +1,32 @@
+{
+  "RecipeFormatVersion": "2020-01-25",
+  "ComponentName": "com.agent.skillsdk",
+  "ComponentVersion": "0.1.0",
+  "ComponentDescription": "Agent Skill SDK component with offline reasoning and skill triggering",
+  "ComponentPublisher": "Your Name",
+  "ComponentConfiguration": {
+    "DefaultConfiguration": {
+      "enabled": true
+    }
+  },
+  "Manifests": [
+    {
+      "Platform": {
+        "os": "linux"
+      },
+      "Lifecycle": {
+        "Run": "python3 -u app.py"
+      },
+      "Artifacts": [
+        {
+          "Uri": "s3://your-bucket/agent-skill-sdk.zip",
+          "Unarchive": "ZIP",
+          "Permission": {
+            "Read": "OWNER",
+            "Execute": "OWNER"
+          }
+        }
+      ]
+    }
+  ]
+}
